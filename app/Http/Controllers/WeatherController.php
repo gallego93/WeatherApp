@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\WeatherRequest;
 use App\Models\Weather;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use App\Traits\HandlesWeatherRequests;
 
 class WeatherController extends Controller
 {
+    use HandlesWeatherRequests;
+
     /**
      * Display a listing of the resource.
      */
@@ -41,43 +44,18 @@ class WeatherController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(WeatherRequest $request)
     {
-        $apiKey = config('services.openweathermap.key');
+        [$latitude, $longitude] = $this->getCoordinates($request->city, $request->latitude, $request->longitude, env('OPENWEATHERMAP_KEY'));
 
-        if ($request->filled('city')) {
-            $city = $request->city;
-
-            $geoResponse = Http::get("http://api.openweathermap.org/geo/1.0/direct", [
-                'q' => $city,
-                'limit' => 1,
-                'appid' => $apiKey
-            ]);
-
-            if ($geoResponse->successful() && count($geoResponse->json()) > 0) {
-                $geoData = $geoResponse->json()[0];
-                $latitude = $geoData['lat'];
-                $longitude = $geoData['lon'];
-            } else {
-                return back()->with('error', 'No se pudo obtener la ubicación de la ciudad ingresada.');
-            }
-        } else {
-            $latitude = $request->latitude;
-            $longitude = $request->longitude;
+        if ($latitude === null || $longitude === null) {
+            return back()->with('error', 'No se pudo obtener la ubicación de la ciudad ingresada.');
         }
 
-        $weatherResponse = Http::get("http://api.openweathermap.org/data/2.5/weather", [
-            'lat' => $latitude,
-            'lon' => $longitude,
-            'appid' => $apiKey,
-            'units' => 'metric',
-            'lang' => 'es'
-        ]);
+        $weatherData = $this->fetchWeatherData($latitude, $longitude, env('OPENWEATHERMAP_KEY'));
 
-        if ($weatherResponse->successful()) {
-            $weatherData = $weatherResponse->json();
-
-            $weather = Weather::create([
+        if ($weatherData) {
+            Weather::create([
                 'city' => $weatherData['name'],
                 'latitude' => $latitude,
                 'longitude' => $longitude,
@@ -88,11 +66,10 @@ class WeatherController extends Controller
                 'user_id' => Auth::id(),
             ]);
 
-            return redirect()->route('weathers.index')
-                ->with('success', 'Registro guardado de manera exitosa!');
-        } else {
-            return back()->with('error', 'No se pudo obtener los datos climatológicos.');
+            return redirect()->route('weathers.index')->with('success', 'Registro guardado de manera exitosa!');
         }
+
+        return back()->with('error', 'No se pudo obtener los datos climatológicos.');
     }
 
     /**

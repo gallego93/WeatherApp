@@ -13,29 +13,29 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @can('dashboard.index')
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
                     @endcan
                     @can('users.index')
-                        <x-nav-link :href="url('users')" :active="request()->routeIs('users')">
-                            {{ __('Users') }}
-                        </x-nav-link>
+                    <x-nav-link :href="url('users')" :active="request()->routeIs('users')">
+                        {{ __('Users') }}
+                    </x-nav-link>
                     @endcan
                     @can('roles.index')
-                        <x-nav-link :href="url('roles')" :active="request()->routeIs('roles')">
-                            {{ __('Roles') }}
-                        </x-nav-link>
+                    <x-nav-link :href="url('roles')" :active="request()->routeIs('roles')">
+                        {{ __('Roles') }}
+                    </x-nav-link>
                     @endcan
                     @can('permissions.index')
-                        <x-nav-link :href="url('permissions')" :active="request()->routeIs('permissions')">
-                            {{ __('Permissions') }}
-                        </x-nav-link>
+                    <x-nav-link :href="url('permissions')" :active="request()->routeIs('permissions')">
+                        {{ __('Permissions') }}
+                    </x-nav-link>
                     @endcan
                     @can('weathers.index')
-                        <x-nav-link :href="url('weathers')" :active="request()->routeIs('weathers')">
-                            {{ __('Weathers') }}
-                        </x-nav-link>
+                    <x-nav-link :href="url('weathers')" :active="request()->routeIs('weathers')">
+                        {{ __('Weathers') }}
+                    </x-nav-link>
                     @endcan
                 </div>
             </div>
@@ -61,17 +61,16 @@
 
                     <x-slot name="content">
                         @can('profile.edit')
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+                        <x-dropdown-link :href="route('profile.edit')">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
                         @endcan
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -100,29 +99,29 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @can('dashboard.index')
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
             @endcan
             @can('users.index')
-                <x-nav-link :href="url('users')" :active="request()->routeIs('users')">
-                    {{ __('Users') }}
-                </x-nav-link>
+            <x-nav-link :href="url('users')" :active="request()->routeIs('users')">
+                {{ __('Users') }}
+            </x-nav-link>
             @endcan
             @can('roles.index')
-                <x-nav-link :href="url('roles')" :active="request()->routeIs('roles')">
-                    {{ __('Roles') }}
-                </x-nav-link>
+            <x-nav-link :href="url('roles')" :active="request()->routeIs('roles')">
+                {{ __('Roles') }}
+            </x-nav-link>
             @endcan
             @can('permissions.index')
-                <x-nav-link :href="url('permissions')" :active="request()->routeIs('permissions')">
-                    {{ __('Permissions') }}
-                </x-nav-link>
+            <x-nav-link :href="url('permissions')" :active="request()->routeIs('permissions')">
+                {{ __('Permissions') }}
+            </x-nav-link>
             @endcan
             @can('weathers.index')
-                <x-nav-link :href="url('weathers')" :active="request()->routeIs('weathers')">
-                    {{ __('Weathers') }}
-                </x-nav-link>
+            <x-nav-link :href="url('weathers')" :active="request()->routeIs('weathers')">
+                {{ __('Weathers') }}
+            </x-nav-link>
             @endcan
         </div>
 
@@ -135,17 +134,16 @@
 
             <div class="mt-3 space-y-1">
                 @can('profile.edit')
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('profile.edit')">
+                    {{ __('Profile') }}
+                </x-responsive-nav-link>
                 @endcan
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <x-responsive-nav-link :href="route('logout')"
-                        onclick="event.preventDefault();
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>

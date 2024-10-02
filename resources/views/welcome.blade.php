@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon"/>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -299,109 +299,52 @@
     <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 selection:bg-red-500 selection:text-white">
         @if (Route::has('login'))
-            <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                @auth
-                    <a href="{{ url('/dashboard') }}"
-                        class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                @else
-                    <a href="{{ route('login') }}"
-                        class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
-                        in</a>
+        <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
+            @auth
+            <a href="{{ url('/dashboard') }}"
+                class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+            @else
+            <a href="{{ route('login') }}"
+                class="font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log
+                in</a>
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}"
-                            class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
-                    @endif
-                @endauth
-            </div>
+            @if (Route::has('register'))
+            <a href="{{ route('register') }}"
+                class="ml-4 font-semibold text-gray-600 hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</a>
+            @endif
+            @endauth
+        </div>
         @endif
-
-        <div class="max-w-7xl mx-auto p-6 lg:p-8">
-            <div class="flex justify-center">
-                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+        <div class="weather-container">
+            @if(isset($error))
+            <h1>Error: {{ $error }}</h1>
+            @else
+            <div class="weather-info">
+                <h1 id="city-name">Ciudad: {{ $city }}</h1>
+                <p id="current-date">{{ \Carbon\Carbon::now()->formatLocalized('%A %d %B %Y') }}</p>
+                <p id="current-time">{{ \Carbon\Carbon::now()->format('H:i:s') }}</p>
+                <h2 id="weather-title">Clima Actual: {{ $weatherCondition }}</h2>
+                <p id="temperature">Temperatura: {{ $temperature }}°C</p>
             </div>
-            <br>
-            <!-- -->
-            <div class="weather-container">
-                <div class="weather-info">
-                    <h1 id="city-name">Cargando ciudad...</h1>
-                    <p id="current-date">Cargando fecha...</p>
-                    <p id="current-time">Cargando hora...</p>
-                    <h2 id="weather-title">Clima Actual</h2>
-                    <p id="temperature">Cargando temperatura...</p>
-                </div>
-                <div class="weather-image">
-                    <img id="weather-img" src="" alt="Condición del clima" style="display: none;">
-                </div>
+            <div class="weather-image">
+                <img id="weather-img" src="http://openweathermap.org/img/wn/{{ $iconCode }}@2x.png"
+                    alt="Condición del clima">
             </div>
+            @endif
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const weatherTitle = document.getElementById('weather-title');
-            const temperatureElement = document.getElementById('temperature');
-            const cityNameElement = document.getElementById('city-name');
-            const dateElement = document.getElementById('current-date');
-            const timeElement = document.getElementById('current-time');
-            const weatherImg = document.getElementById('weather-img');
-
-            const apiKey =
-                '{{ config('services.openweathermap.key') }}';
-            const ciudad = 'Cali, CO';
-            const apiUrl =
-                `https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`;
-
             function updateTime() {
                 const now = new Date();
-                const optionsDate = {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
                 const optionsTime = {
                     hour: '2-digit',
                     minute: '2-digit',
                     second: '2-digit'
                 };
-
-                dateElement.textContent = now.toLocaleDateString('es-ES', optionsDate);
-                timeElement.textContent = now.toLocaleTimeString('es-ES', optionsTime);
+                document.getElementById('current-time').textContent = now.toLocaleTimeString('es-ES', optionsTime);
             }
-
-            function showWeatherImage(iconCode) {
-                const iconUrl = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
-                weatherImg.src = iconUrl;
-                weatherImg.style.display = 'block';
-            }
-
-            async function fetchWeatherData() {
-                try {
-                    const response = await fetch(apiUrl);
-                    const data = await response.json();
-                    const temperature = data.main.temp;
-                    const weatherCondition = data.weather[0].description;
-                    const cityName = data.name;
-                    const iconCode = data.weather[0].icon;
-
-                    temperatureElement.textContent = `Temperatura: ${temperature}°C`;
-                    cityNameElement.textContent = `Ciudad: ${cityName}`;
-                    weatherTitle.textContent = `Clima Actual: ${weatherCondition}`;
-
-                    updateTime();
-
-                    showWeatherImage(iconCode);
-                } catch (error) {
-                    console.error('Error obteniendo datos del clima:', error);
-                    cityNameElement.textContent = 'Error obteniendo datos de la ciudad';
-                    temperatureElement.textContent = '---';
-                    weatherTitle.textContent = '---';
-                    weatherImg.style.display = 'none';
-                }
-            }
-
-            fetchWeatherData();
-
             setInterval(updateTime, 1000);
         });
     </script>
