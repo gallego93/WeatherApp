@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -28,12 +28,8 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RoleRequest $request)
     {
-        $request->validate([
-            'name' => 'required|unique:roles',
-        ]);
-
         Role::create(['name' => $request->name]);
 
         return redirect()->route('roles.index')->with('success', 'Registro guardado de manera exitosa!');
@@ -53,12 +49,8 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(RoleRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $id,
-        ]);
-
         $role = Role::findOrFail($id);
         $role->update(['name' => $request->name]);
         $selectedPermissions = Permission::whereIn('id', $request->input('permissions', []))->get();

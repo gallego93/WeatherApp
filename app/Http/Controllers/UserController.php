@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -13,8 +14,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-            $users = User::all();
-                return view('users.index', compact('users'));
+        $users = User::all();
+        return view('users.index', compact('users'));
     }
 
     /**
@@ -28,11 +29,11 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-            $user = User::create($request->all())->assignRole('user');
-            return redirect()->route('users.index', $user->id)
-                ->with('success', 'Registro guardado de manera exitosa!');
+        $user = User::create($request->all())->assignRole('user');
+        return redirect()->route('users.index', $user->id)
+            ->with('success', 'Registro guardado de manera exitosa!');
     }
 
     /**
@@ -40,8 +41,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-            $user = User::find($id);
-                return view('users.show', compact('user'));
+        $user = User::find($id);
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -49,20 +50,20 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-            $user = User::find($id);
-            $roles = Role::all();
-            $userRoles = $user->roles->pluck('name')->toArray();
-                return view('users.edit', compact('user', 'roles', 'userRoles'));
+        $user = User::find($id);
+        $roles = Role::all();
+        $userRoles = $user->roles->pluck('name')->toArray();
+        return view('users.edit', compact('user', 'roles', 'userRoles'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
-            $user = User::find($id);
-            $user->update($request->all());
-            $user->syncRoles($request->input('roles', []));
+        $user = User::find($id);
+        $user->update($request->all());
+        $user->syncRoles($request->input('roles', []));
 
         return redirect()->route('users.edit', $user->id)
             ->with('success', 'Registro modificado de manera exitosa!');
@@ -73,7 +74,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-            $user = User::find($id)->delete();
-            return back()->with('success', 'Registro eliminado de manera exitosa!');
+        $user = User::find($id)->delete();
+        return back()->with('success', 'Registro eliminado de manera exitosa!');
     }
 }

@@ -17,20 +17,22 @@
                             placeholder="Ciudad" value="{{ old('city') }}">
                     </div>
                     <div class="w-full">
-                        <label for="temperature"
-                            class="block mb-2 text-sm font-medium text-gray-900"> {{ __('Temperature')}} </label>
+                        <label for="temperature" class="block mb-2 text-sm font-medium text-gray-900"> {{
+                            __('Temperature')}} </label>
                         <input type="text" name="temperature" id="temperature"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             placeholder="Temperatura" value="{{ old('temperature') }}" readonly>
                     </div>
                     <div class="w-full">
-                        <label for="weather" class="block mb-2 text-sm font-medium text-gray-900"> {{ __('Weather Status')}} </label>
+                        <label for="weather" class="block mb-2 text-sm font-medium text-gray-900"> {{ __('Weather
+                            Status')}} </label>
                         <input type="text" name="weather" id="weather"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             placeholder="Estado del Clima" value="{{ old('weather') }}" readonly>
                     </div>
                     <div class="w-full">
-                        <label for="icon" class="block mb-2 text-sm font-medium text-gray-900"> {{ __('Icon Of Climate')}} </label>
+                        <label for="icon" class="block mb-2 text-sm font-medium text-gray-900"> {{ __('Icon Of
+                            Climate')}} </label>
                         <img id="weather-icon" alt="Icono del Clima" class="block w-16 h-16">
                     </div>
                     <div class="w-full">

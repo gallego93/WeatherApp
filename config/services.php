@@ -32,7 +32,7 @@ return [
     ],
 
     'openweathermap' => [
-    'key' => env('OPENWEATHERMAP_KEY'),
+        'key' => env('OPENWEATHERMAP_KEY'),
     ],
 
 ];
